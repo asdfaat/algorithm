@@ -1,36 +1,35 @@
-# failed: 틀림
 
-# 1. 두 수 중 작은 수를 키값으로 하는 딕셔너리를 만든다.
-# 2. 딕셔너리에서 노드1과 연결된 노드들을 큐에 넣는다.
-# 3. 큐에서 뺀, 다음 방문할 노드와 연결된 노드들을 딕셔너리에서 찾아 큐에 넣는다.
+
+# 1. 방향이 없는 그래프 특성에 맞게 연결 정보를 담은 리스트를 생성한다.
+# 2. 리스트에서 노드1과 연결된 노드들을 큐에 넣는다.
+# 3. 큐에서 뺀, 다음 방문할 노드와 연결된 노드들을 큐에 넣는다.
 # 4. 방문한 노드는 중복이 없는 set 타입의 visited로 표시
 # 5. 큐가 빌 때까지 반복
 
 import sys
-
+from collections import deque
 read = sys.stdin.readline
 
 n = int(read())
 pn = int(read())
 
-pairs = {}
+edges = [[] for _ in range(n+1)]
 for _ in range(pn):
     a, b = map(int, read().split())
-    if min(a,b) not in pairs:
-        pairs[min(a, b)] = []
-    
-    pairs[min(a,b)].append(max(a,b)) #<- 양쪽 다 적어줘야 함
+    edges[a].append(b)
+    edges[b].append(a)
 
 
-queue = [1]
+
+queue = deque([1])
 visited = set()
 while queue:
-    cur = queue.pop(0)
-    visited.add(cur)
+    cur = queue.popleft()
 
-    for node in pairs.get(cur, []):
+    
+    for node in edges[cur]:
         if node not in visited:
             queue.append(node)
-
-print(len(visited)-1)
-print(visited)
+            visited.add(node)
+num = max(0, len(visited)-1)
+print(num) 
